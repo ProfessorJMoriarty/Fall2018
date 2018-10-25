@@ -1,0 +1,92 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+int main()
+{
+	string inventory[8];
+	char input;
+	int room;
+	ifstream myfile;
+
+	cout << "would you like to load the last game? (y/n)" << endl;
+	cin >> input;
+
+	//load saved game
+	if (input == 'y') {
+		myfile.open("Save1.txt");
+		myfile >> room;
+		cout << "setting room to " << room << endl;
+		cout << "loading inventory..." << endl;
+		for (int i = 0; i < 8; i++)
+			getline(myfile, inventory[i]);
+	}
+	//otherwise set room to 1 and give empty inventory
+	else {
+		room = 1;
+		for (int i = 0; i < 8; i++)
+			inventory[i] = " ";
+	}
+
+
+	cout << "welcome to the dungeon game." << endl << endl << endl;
+
+	while (input != 'q') {
+		cout << "your inventory items: ";
+		for (int i = 0; i < 8; i++)
+			cout << i<<": "<<inventory[i] << " ";
+		cout << endl;
+
+		switch (room) {
+		case 1:
+			cout << "room 1, go N" << endl;
+			cin >> input;
+			if (input == 'N')
+				room = 2;
+			break;
+		case 2:
+		
+			if (inventory[6].compare("dinosaur") != 0) {
+				cout << "you got the dinosaur!" << endl;
+				inventory[6] = "dinosaur";
+			}
+			cout << "room 2, go S or W" << endl;
+			cin >> input;
+			if (input == 'S')
+				room = 1;
+			if (input == 'W')
+				room = 3;
+			break;
+		case 3:
+			if (inventory[7].compare("bubblegum") != 0) {
+				cout << "you got the bubblegum!" << endl;
+				inventory[7] = "bubblegum";
+			}
+			cout << "room 3, go E" << endl;
+			cin >> input;
+			if (input == 'E')
+				room = 2;
+			break;
+
+		}//end switch
+	}//end game loop
+
+	cout << "would you like to save?" << endl;
+	cin >> input;
+	if (input == 'y') {
+		cout << "saving game..." << endl << endl;
+		ofstream myfile("Save1.txt");
+		myfile << room;
+		for (int i = 0; i < 8; i++) {
+			myfile << inventory[i]<<endl;
+		
+		}
+	}
+
+	cout << "goodbye" << endl;
+	myfile.close();
+	system("pause");
+}
+
+
